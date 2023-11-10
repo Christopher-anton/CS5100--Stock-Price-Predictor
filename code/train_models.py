@@ -56,6 +56,42 @@ class Models():
 
         return model1
     
+    # def LSTM(self):
+    #     model1 = Sequential()
+    #     model1.add(InputLayer((14, 5)))
+    #     model1.add(LSTM(64, return_sequences=True))
+    #     model1.add(LSTM(32))
+    #     model1.add(Dense(8, 'relu'))
+    #     model1.add(Dense(1, 'linear'))
+
+    #     cp1 = ModelCheckpoint('lstm_model/', save_best_only=True)
+    #     model1.compile(loss=MeanSquaredError(), optimizer=Adam(learning_rate=0.0001), metrics=[RootMeanSquaredError()])
+
+    #     model1.fit(self.trainX, self.trainY, validation_data=(self.valX, self.valY), epochs=10, callbacks=[cp1])
+    #     print("********LSTM MODEL HAS SUCCESSFULLY BEEN TRAINED********")
+
+    #     self.plot_predictions1(model1, self.testX, self.testY)
+
+    #     return model1
+
+    # def LSTM(self):
+    #     model1 = Sequential()
+    #     model1.add(InputLayer((14, 5)))
+    #     model1.add(LSTM(32, return_sequences=True))
+    #     model1.add(LSTM(64))
+    #     model1.add(Dense(8, 'relu'))
+    #     model1.add(Dense(1, 'linear'))
+
+    #     cp1 = ModelCheckpoint('lstm_model/', save_best_only=True)
+    #     model1.compile(loss=MeanSquaredError(), optimizer=Adam(learning_rate=0.0001), metrics=[RootMeanSquaredError()])
+
+    #     model1.fit(self.trainX, self.trainY, validation_data=(self.valX, self.valY), epochs=10, callbacks=[cp1])
+    #     print("********LSTM MODEL HAS SUCCESSFULLY BEEN TRAINED********")
+
+    #     self.plot_predictions1(model1, self.testX, self.testY)
+
+    #     return model1
+    
     def GRU(self):
         model2 = Sequential()
         model2.add(InputLayer((14, 5)))
@@ -72,6 +108,42 @@ class Models():
         self.plot_predictions1(model2, self.testX, self.testY)
 
         return model2
+    
+    # def GRU(self):
+    #     model2 = Sequential()
+    #     model2.add(InputLayer((14, 5)))
+    #     model2.add(GRU(64, return_sequences=True))
+    #     model2.add(GRU(32))
+    #     model2.add(Dense(8, 'relu'))
+    #     model2.add(Dense(1, 'linear'))
+
+    #     cp2 = ModelCheckpoint('gru_model/', save_best_only=True)
+    #     model2.compile(loss=MeanSquaredError(), optimizer=Adam(learning_rate=0.0001), metrics=[RootMeanSquaredError()])
+
+    #     model2.fit(self.trainX, self.trainY, validation_data=(self.valX, self.valY), epochs=10, callbacks=[cp2])
+    #     print("********GRU MODEL HAS SUCCESSFULLY BEEN TRAINED********")
+
+    #     self.plot_predictions1(model2, self.testX, self.testY)
+
+    #     return model2
+
+    # def GRU(self):
+    #     model2 = Sequential()
+    #     model2.add(InputLayer((14, 5)))
+    #     model2.add(GRU(32, return_sequences=True))
+    #     model2.add(GRU(64))
+    #     model2.add(Dense(8, 'relu'))
+    #     model2.add(Dense(1, 'linear'))
+
+    #     cp2 = ModelCheckpoint('gru_model/', save_best_only=True)
+    #     model2.compile(loss=MeanSquaredError(), optimizer=Adam(learning_rate=0.0001), metrics=[RootMeanSquaredError()])
+
+    #     model2.fit(self.trainX, self.trainY, validation_data=(self.valX, self.valY), epochs=10, callbacks=[cp2])
+    #     print("********GRU MODEL HAS SUCCESSFULLY BEEN TRAINED********")
+
+    #     self.plot_predictions1(model2, self.testX, self.testY)
+
+    #     return model2
 
     def CNN1d(self):
         model3 = Sequential()

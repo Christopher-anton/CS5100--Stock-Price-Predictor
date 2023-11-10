@@ -4,7 +4,7 @@ from train_models import Models
 print("********SYSTEM BOOT UP COMPLETE********")
 
 print("********INITIATING DATASET PREPARATION PROTOCOLS********")
-obj = train_data('dataset/TSLA.csv', 14, 1)
+obj = train_data('dataset/AMZN.csv', 14, 1)
 trainX, trainY, valX, valY, testX, testY, scaler, dates = obj.csv_read()
 print("********DATASET PREPARATION PROTOCOLS COMPLETE********")
 
