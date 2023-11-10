@@ -32,7 +32,7 @@ class Models():
         plt.plot([i for i in range(len(y))], y)
         # plt.plot([i for i in range(len(final_predictions))], final_predictions)
         # plt.plot([i for i in range(len(r_y))], r_y)
-        plt.title(f"LSTM MODEL OUTPUT\MEAN SQUARED ERROR: {mse(y, predictions)}")
+        plt.title(f"LSTM MODEL OUTPUT\nMEAN SQUARED ERROR: {mse(y, predictions)}")
         plt.legend(["PREDICTION", "ACTUAL"])
         plt.show()
     
