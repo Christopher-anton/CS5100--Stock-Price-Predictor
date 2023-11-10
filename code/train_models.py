@@ -10,7 +10,7 @@ from sklearn.preprocessing import StandardScaler
 import numpy as np
 
 class Models():
-    def __init__(self, trainX, trainY, valX, valY, testX, testY, scaler) -> None:
+    def __init__(self, trainX, trainY, valX, valY, testX, testY, scaler, dates) -> None:
         self.trainX = trainX
         self.trainY = trainY
         self.valX = valX
@@ -18,8 +18,9 @@ class Models():
         self.testX = testX
         self.testY = testY
         self.scaler = scaler
+        self.dates = dates
 
-    def plot_predictions1(self, model, X, y, start=0, end=50):
+    def plot_predictions1(self, model, X, y):
         print("********PREDICTING THE FUTURE********")
         predictions = model.predict(X).flatten()
         r_predictions = []
@@ -30,8 +31,8 @@ class Models():
         r_y = np.repeat(y, 5, axis = -1)
         final_y = self.scaler.inverse_transform(r_y)[:, 0]
 
-        plt.plot([i for i in range(len(final_predictions))], final_predictions)
-        plt.plot([i for i in range(len(final_y))], final_y)
+        plt.plot(self.dates, final_predictions)
+        plt.plot(self.dates, final_y)
         plt.xlabel("Day")
         plt.ylabel("Stock Price in ($)")
         plt.title(f"LSTM MODEL OUTPUT\nMEAN SQUARED ERROR: {mse(y, predictions)}")
@@ -56,7 +57,34 @@ class Models():
         return model1
     
     def GRU(self):
-        print("GRU IS A WORK IN PROGRESS")
+        model2 = Sequential()
+        model2.add(InputLayer((14, 5)))
+        model2.add(GRU(64))
+        model2.add(Dense(8, 'relu'))
+        model2.add(Dense(1, 'linear'))
+
+        cp2 = ModelCheckpoint('gru_model/', save_best_only=True)
+        model2.compile(loss=MeanSquaredError(), optimizer=Adam(learning_rate=0.0001), metrics=[RootMeanSquaredError()])
+
+        model2.fit(self.trainX, self.trainY, validation_data=(self.valX, self.valY), epochs=10, callbacks=[cp2])
+        print("********GRU MODEL HAS SUCCESSFULLY BEEN TRAINED********")
+
+        self.plot_predictions1(model2, self.testX, self.testY)
+
+        return model2
 
     def CNN1d(self):
-        print("CNN1d IS A WORK IN PROGRESS")
+        model3 = Sequential()
+        model3.add(InputLayer((14, 5)))
+        model3.add(Conv1D(64, kernel_size=2))
+        model3.add(Flatten())
+        model3.add(Dense(8, 'relu'))
+        model3.add(Dense(1, 'linear'))
+
+        cp3 = ModelCheckpoint('cnn1d_model/', save_best_only=True)
+        model3.compile(loss=MeanSquaredError(), optimizer=Adam(learning_rate=0.0001), metrics=[RootMeanSquaredError()])
+
+        model3.fit(self.trainX, self.trainY, validation_data=(self.valX, self.valY), epochs=10, callbacks=[cp3])
+        print("********GRU MODEL HAS SUCCESSFULLY BEEN TRAINED********")
+
+        self.plot_predictions1(model3, self.testX, self.testY)
