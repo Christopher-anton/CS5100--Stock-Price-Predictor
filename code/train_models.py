@@ -1,15 +1,11 @@
-import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import *
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.losses import MeanSquaredError
 from tensorflow.keras.metrics import RootMeanSquaredError
 from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.models import load_model
 from sklearn.metrics import mean_squared_error as mse
 import matplotlib.pyplot as plt
-import pandas as pd
-import numpy as np
 from sklearn.preprocessing import StandardScaler
 
 class Models():
@@ -24,6 +20,7 @@ class Models():
     def plot_predictions1(self, model, X, y, start=0, end=50):
         scaler = StandardScaler()
 
+        print("********PREDICTING THE FUTURE********")
         predictions = model.predict(X).flatten()
         # r_predictions = np.repeat(predictions, 5, axis = -1)
         # final_predictions = scaler.inverse_transform(r_predictions)[:, 0]
@@ -35,7 +32,7 @@ class Models():
         plt.plot([i for i in range(len(y))], y)
         # plt.plot([i for i in range(len(final_predictions))], final_predictions)
         # plt.plot([i for i in range(len(r_y))], r_y)
-        plt.title("LSTM MODEL OUTPUT\nACCURACY:")
+        plt.title(f"LSTM MODEL OUTPUT\MEAN SQUARED ERROR: {mse(y, predictions)}")
         plt.legend(["PREDICTION", "ACTUAL"])
         plt.show()
     
