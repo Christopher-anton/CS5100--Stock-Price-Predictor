@@ -39,4 +39,4 @@ class train_data:
                 testY.append(scaled_for_training[i + self.future - 1:i + self.future, 0])
                 
         trainX, trainY, valX, valY, testX, testY = np.array(trainX), np.array(trainY), np.array(valX), np.array(valY), np.array(testX), np.array(testY)
-        return trainX, trainY, valX, valY, testX, testY
+        return trainX, trainY, valX, valY, testX, testY, scaler

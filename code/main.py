@@ -5,10 +5,10 @@ print("********SYSTEM BOOT UP COMPLETE********")
 
 print("********INITIATING DATASET PREPARATION PROTOCOLS********")
 obj = train_data('dataset/TSLA.csv', 14, 1)
-trainX, trainY, valX, valY, testX, testY = obj.csv_read()
+trainX, trainY, valX, valY, testX, testY, scaler = obj.csv_read()
 print("********DATASET PREPARATION PROTOCOLS COMPLETE********")
 
-c_model = Models(trainX, trainY, valX, valY, testX, testY)
+c_model = Models(trainX, trainY, valX, valY, testX, testY, scaler)
 
 answer = input("Select Model:\n LSTM\n GRU\n CNN1d\n\n")
 print()

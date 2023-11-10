@@ -7,31 +7,33 @@ from tensorflow.keras.optimizers import Adam
 from sklearn.metrics import mean_squared_error as mse
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
+import numpy as np
 
 class Models():
-    def __init__(self, trainX, trainY, valX, valY, testX, testY) -> None:
+    def __init__(self, trainX, trainY, valX, valY, testX, testY, scaler) -> None:
         self.trainX = trainX
         self.trainY = trainY
         self.valX = valX
         self.valY = valY
         self.testX = testX
         self.testY = testY
+        self.scaler = scaler
 
     def plot_predictions1(self, model, X, y, start=0, end=50):
-        scaler = StandardScaler()
-
         print("********PREDICTING THE FUTURE********")
         predictions = model.predict(X).flatten()
-        # r_predictions = np.repeat(predictions, 5, axis = -1)
-        # final_predictions = scaler.inverse_transform(r_predictions)[:, 0]
+        r_predictions = []
+        for i in range(50):
+            r_predictions += [[predictions[i], predictions[i], predictions[i], predictions[i], predictions[i]]]
+        final_predictions = self.scaler.inverse_transform(r_predictions)[:, 0]
 
-        # r_y = np.repeat(y, 5, axis=1)
-        # final_y = scaler.inverse_transform(r_y)[:, 0]
-        
-        plt.plot([i for i in range(len(predictions))], predictions)
-        plt.plot([i for i in range(len(y))], y)
-        # plt.plot([i for i in range(len(final_predictions))], final_predictions)
-        # plt.plot([i for i in range(len(r_y))], r_y)
+        r_y = np.repeat(y, 5, axis = -1)
+        final_y = self.scaler.inverse_transform(r_y)[:, 0]
+
+        plt.plot([i for i in range(len(final_predictions))], final_predictions)
+        plt.plot([i for i in range(len(final_y))], final_y)
+        plt.xlabel("Day")
+        plt.ylabel("Stock Price in ($)")
         plt.title(f"LSTM MODEL OUTPUT\nMEAN SQUARED ERROR: {mse(y, predictions)}")
         plt.legend(["PREDICTION", "ACTUAL"])
         plt.show()
