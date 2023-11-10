@@ -1,26 +1,30 @@
+print("********SYSTEM BOOTING UP********")
 from dataset_setup import train_data
-from LSTM import Models
-import tensorflow as tf
-import numpy as np
-from tqdm import tqdm
-import matplotlib.pyplot as plt
+from train_models import Models
+print("********SYSTEM BOOT UP COMPLETE********")
 
-input_dim = 5
-hidden_dim = 32
-num_layers = 2
-output_dim = 2
-
-past_days = 14
-future = 1
-
-# dateset class
-obj = train_data('dataset/TSLA.csv',past_days,future)
+print("********INITIATING DATASET PREPARATION PROTOCOLS********")
+obj = train_data('dataset/TSLA.csv', 14, 1)
 trainX, trainY, valX, valY, testX, testY = obj.csv_read()
-
-print(f"trainX: {trainX.shape}\ntrainY: {trainX.shape}\nvalX: {valX.shape}\nvalY: {valY.shape}\ntestX: {testX.shape}\ntestY: {testY.shape}")
-
-# plt.plot([i for i in range(len(trainY))], trainY)
-# plt.show()
+print("********DATASET PREPARATION PROTOCOLS COMPLETE********")
 
 c_model = Models(trainX, trainY, valX, valY, testX, testY)
-model = c_model.LSTM()
+
+answer = input("Select Model:\n LSTM\n GRU\n CNN1d\n\n")
+print()
+
+if answer == "LSTM":
+    print("********INITIATING LSTM MODEL PROTOCOLS********")
+    model = c_model.LSTM()
+    print("********SYSTEM TERMINATING********")
+elif answer == "GRU":
+    print("********INITIATING GRU MODEL PROTOCOLS********")
+    model = c_model.GRU()
+    print("********SYSTEM TERMINATING********")
+elif answer == "CNN1d":
+    print("********INITIATING CNN1d MODEL PROTOCOLS********")
+    model = c_model.CNN1d()
+    print("********SYSTEM TERMINATING********")
+else:
+    print("********INVALID OPTION********")
+    print("********SYSTEM TERMINATING********")

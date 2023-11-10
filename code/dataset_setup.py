@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
-
+from tqdm import tqdm
 
 class train_data:
     def __init__(self, csv, past, future) -> None:
@@ -26,7 +26,8 @@ class train_data:
         valY = []
         testX = []
         testY = []
-        for i in range(self.past, len(scaled_for_training) - self.future + 1):
+        
+        for i in tqdm(range(self.past, len(scaled_for_training) - self.future + 1)):
             if i < len(scaled_for_training) - 200:
                 trainX.append(scaled_for_training[i - self.past:i, 0:for_training.shape[1]])
                 trainY.append(scaled_for_training[i + self.future - 1:i + self.future, 0])
