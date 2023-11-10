@@ -1,6 +1,6 @@
 from dataset_setup import train_data
-from LSTM import LSTM
-import torch    
+from LSTM import Models
+import tensorflow as tf
 import numpy as np
 from tqdm import tqdm
 import matplotlib.pyplot as plt
@@ -15,33 +15,12 @@ future = 1
 
 # dateset class
 obj = train_data('dataset/TSLA.csv',past_days,future)
-trainX , trainY =obj.csv_read()
+trainX, trainY, valX, valY, testX, testY = obj.csv_read()
+
+print(f"trainX: {trainX.shape}\ntrainY: {trainX.shape}\nvalX: {valX.shape}\nvalY: {valY.shape}\ntestX: {testX.shape}\ntestY: {testY.shape}")
 
 # plt.plot([i for i in range(len(trainY))], trainY)
 # plt.show()
 
-# LSTM model
-model = LSTM( input_dim=input_dim, hidden_dim=hidden_dim, output_dim = output_dim, num_layers=num_layers)
-
-loss_fn = torch.nn.MSELoss()
-
-optimiser = torch.optim.Adam(model.parameters(), lr = 0.01)
-print(model)
-print(len(list(model.parameters())))
-for i in tqdm(range(len(list(model.parameters())))):
-    print(list(model.parameters())[i].size())
-
-num_epochs = 100
-hist = np.zeros(num_epochs)
-seq_dim = past_days
-
-for t in tqdm(range(num_epochs)):
-    y_train_pred = model(trainX)
-    loss = loss_fn(y_train_pred, trainY)
-    if t%10==0 and t!=0:
-        print("Epoch ", t, "MSE: ", loss.item())
-    hist[t]= loss.item()
-
-    optimiser.zero_grad()
-    loss.backward()
-    optimiser.step()
+c_model = Models(trainX, trainY, valX, valY, testX, testY)
+model = c_model.LSTM()
