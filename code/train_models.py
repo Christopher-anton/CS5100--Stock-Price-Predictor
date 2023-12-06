@@ -4,7 +4,6 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.losses import MeanSquaredError
 from tensorflow.keras.metrics import RootMeanSquaredError
 from tensorflow.keras.optimizers import Adam
-from sklearn.metrics import mean_squared_error as mse
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 import numpy as np
@@ -20,8 +19,16 @@ class Models():
         self.scaler = scaler
         self.dates = dates
 
-    def plot_predictions1(self, model, X, y):
-        print("********PREDICTING THE FUTURE********")
+    def MAPE(self, true_val, pred_val):
+        sum = 0
+        for i in range(len(true_val)):
+            sum += np.abs((true_val[i] - pred_val[i]) / true_val[i])
+
+        sum = sum / len(true_val)
+        return sum * 100
+
+    def plot_predictions1(self, model, X, y, name):
+        print("********PREDICTING THE FUTURE********\n")
         predictions = model.predict(X).flatten()
         r_predictions = []
         for i in range(50):
@@ -35,7 +42,7 @@ class Models():
         plt.plot(self.dates, final_y)
         plt.xlabel("Day")
         plt.ylabel("Stock Price in ($)")
-        plt.title(f"LSTM MODEL OUTPUT\nMEAN SQUARED ERROR: {mse(y, predictions)}")
+        plt.title(f"{name} MODEL OUTPUT\nMEAN ABSOLUTE PERCENTAGE ERROR: {self.MAPE(y, predictions)}%")
         plt.legend(["PREDICTION", "ACTUAL"])
         plt.show()
     
@@ -49,12 +56,12 @@ class Models():
         cp1 = ModelCheckpoint('lstm_model/', save_best_only=True)
         model1.compile(loss=MeanSquaredError(), optimizer=Adam(learning_rate=0.0001), metrics=[RootMeanSquaredError()])
 
-        model1.fit(self.trainX, self.trainY, validation_data=(self.valX, self.valY), epochs=10, callbacks=[cp1])
-        print("********LSTM MODEL HAS SUCCESSFULLY BEEN TRAINED********")
+        model1.fit(self.trainX, self.trainY, validation_data=(self.valX, self.valY), epochs=100, callbacks=[cp1])
+        print("********LSTM MODEL HAS SUCCESSFULLY BEEN TRAINED********\n")
 
-        self.plot_predictions1(model1, self.testX, self.testY)
+        self.plot_predictions1(model1, self.testX, self.testY, "LSTM")
 
-        return model1
+        # return model1
     
     # def LSTM(self):
     #     model1 = Sequential()
@@ -102,12 +109,12 @@ class Models():
         cp2 = ModelCheckpoint('gru_model/', save_best_only=True)
         model2.compile(loss=MeanSquaredError(), optimizer=Adam(learning_rate=0.0001), metrics=[RootMeanSquaredError()])
 
-        model2.fit(self.trainX, self.trainY, validation_data=(self.valX, self.valY), epochs=10, callbacks=[cp2])
-        print("********GRU MODEL HAS SUCCESSFULLY BEEN TRAINED********")
+        model2.fit(self.trainX, self.trainY, validation_data=(self.valX, self.valY), epochs=100, callbacks=[cp2])
+        print("********GRU MODEL HAS SUCCESSFULLY BEEN TRAINED********\n")
 
-        self.plot_predictions1(model2, self.testX, self.testY)
+        self.plot_predictions1(model2, self.testX, self.testY, "GRU")
 
-        return model2
+        # return model2
     
     # def GRU(self):
     #     model2 = Sequential()
@@ -145,7 +152,7 @@ class Models():
 
     #     return model2
 
-    def CNN1d(self):
+    def CNN1D(self):
         model3 = Sequential()
         model3.add(InputLayer((14, 5)))
         model3.add(Conv1D(64, kernel_size=2))
@@ -156,7 +163,9 @@ class Models():
         cp3 = ModelCheckpoint('cnn1d_model/', save_best_only=True)
         model3.compile(loss=MeanSquaredError(), optimizer=Adam(learning_rate=0.0001), metrics=[RootMeanSquaredError()])
 
-        model3.fit(self.trainX, self.trainY, validation_data=(self.valX, self.valY), epochs=10, callbacks=[cp3])
-        print("********GRU MODEL HAS SUCCESSFULLY BEEN TRAINED********")
+        model3.fit(self.trainX, self.trainY, validation_data=(self.valX, self.valY), epochs=100, callbacks=[cp3])
+        print("********CNN1D MODEL HAS SUCCESSFULLY BEEN TRAINED********\n")
 
-        self.plot_predictions1(model3, self.testX, self.testY)
+        self.plot_predictions1(model3, self.testX, self.testY, "CNN1D")
+
+        # return model3
