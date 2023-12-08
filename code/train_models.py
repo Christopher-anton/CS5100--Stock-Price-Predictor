@@ -9,7 +9,7 @@ from sklearn.preprocessing import StandardScaler
 import numpy as np
 
 class Models():
-    def __init__(self, trainX, trainY, valX, valY, testX, testY, scaler, dates) -> None:
+    def __init__(self, trainX, trainY, valX, valY, testX, testY, scaler, dates, plot_type) -> None:
         self.trainX = trainX
         self.trainY = trainY
         self.valX = valX
@@ -18,6 +18,7 @@ class Models():
         self.testY = testY
         self.scaler = scaler
         self.dates = dates
+        self.plot_type = plot_type
 
     def MAPE(self, true_val, pred_val):
         sum = 0
@@ -38,17 +39,22 @@ class Models():
         r_y = np.repeat(y, 5, axis = -1)
         final_y = self.scaler.inverse_transform(r_y)[:, 0]
 
-        plt.plot(self.dates, final_predictions)
-        plt.plot(self.dates, final_y)
-        plt.xlabel("Day")
-        plt.ylabel("Stock Price in ($)")
-        plt.title(f"{name} MODEL OUTPUT\nMEAN ABSOLUTE PERCENTAGE ERROR: {self.MAPE(y, predictions)}%")
-        plt.legend(["PREDICTION", "ACTUAL"])
-        plt.show()
+        if self.plot_type:
+            plt.plot(self.dates, final_predictions)
+            plt.plot(self.dates, final_y)
+            plt.xlabel("Day")
+            plt.ylabel("Stock Price in ($)")
+            plt.title(f"{name} MODEL OUTPUT\nMEAN ABSOLUTE PERCENTAGE ERROR: {self.MAPE(y, predictions)}%")
+            plt.legend(["PREDICTION", "ACTUAL"])
+            plt.show()
+
+            return [], []
+        else:
+            return np.array(r_y), np.array(final_predictions)
     
     def LSTM(self):
         model1 = Sequential()
-        model1.add(InputLayer((14, 5)))
+        model1.add(InputLayer((14, 6)))
         model1.add(LSTM(64))
         model1.add(Dense(8, 'relu'))
         model1.add(Dense(1, 'linear'))
@@ -59,9 +65,9 @@ class Models():
         model1.fit(self.trainX, self.trainY, validation_data=(self.valX, self.valY), epochs=100, callbacks=[cp1])
         print("********LSTM MODEL HAS SUCCESSFULLY BEEN TRAINED********\n")
 
-        self.plot_predictions1(model1, self.testX, self.testY, "LSTM")
+        true_val, pred_val = self.plot_predictions1(model1, self.testX, self.testY, "LSTM")
 
-        # return model1
+        return true_val, pred_val
     
     # def LSTM(self):
     #     model1 = Sequential()
@@ -101,7 +107,7 @@ class Models():
     
     def GRU(self):
         model2 = Sequential()
-        model2.add(InputLayer((14, 5)))
+        model2.add(InputLayer((14, 6)))
         model2.add(GRU(64))
         model2.add(Dense(8, 'relu'))
         model2.add(Dense(1, 'linear'))
@@ -112,9 +118,9 @@ class Models():
         model2.fit(self.trainX, self.trainY, validation_data=(self.valX, self.valY), epochs=100, callbacks=[cp2])
         print("********GRU MODEL HAS SUCCESSFULLY BEEN TRAINED********\n")
 
-        self.plot_predictions1(model2, self.testX, self.testY, "GRU")
+        true_val, pred_val = self.plot_predictions1(model2, self.testX, self.testY, "GRU")
 
-        # return model2
+        return true_val, pred_val
     
     # def GRU(self):
     #     model2 = Sequential()
@@ -154,7 +160,7 @@ class Models():
 
     def CNN1D(self):
         model3 = Sequential()
-        model3.add(InputLayer((14, 5)))
+        model3.add(InputLayer((14, 6)))
         model3.add(Conv1D(64, kernel_size=2))
         model3.add(Flatten())
         model3.add(Dense(8, 'relu'))
@@ -166,6 +172,6 @@ class Models():
         model3.fit(self.trainX, self.trainY, validation_data=(self.valX, self.valY), epochs=100, callbacks=[cp3])
         print("********CNN1D MODEL HAS SUCCESSFULLY BEEN TRAINED********\n")
 
-        self.plot_predictions1(model3, self.testX, self.testY, "CNN1D")
+        true_val, pred_val = self.plot_predictions1(model3, self.testX, self.testY, "CNN1D")
 
-        # return model3
+        return true_val, pred_val
