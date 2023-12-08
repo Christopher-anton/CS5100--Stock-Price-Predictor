@@ -23,14 +23,16 @@ true_val2, pred_val2 = gru_model.GRU()
 
 print("********INITIATING CNN1D MODEL PROTOCOLS********\n")
 true_val3, pred_val3 = cnn_model.CNN1D()
-print("********SYSTEM TERMINATING********")
+print("********SYSTEM TERMINATING********\n")
 
-# np.save("LSTM_True.npy", true_val1)
-# np.save("GRU_True.npy", true_val2)
-# np.save("CNN_True.npy", true_val3)
-# np.save("LSTM_Pred.npy", pred_val1)
-# np.save("GRU_Pred.npy", pred_val2)
-# np.save("CNN_Pred.npy", pred_val3)
+if plot_type == False:
+    np.save("LSTM_True.npy", true_val1)
+    np.save("GRU_True.npy", true_val2)
+    np.save("CNN_True.npy", true_val3)
+    np.save("LSTM_Pred.npy", pred_val1)
+    np.save("GRU_Pred.npy", pred_val2)
+    np.save("CNN_Pred.npy", pred_val3)
+
 # answer = input("Select Model:\n LSTM\n GRU\n CNN1d\n\n")
 # print()
 
