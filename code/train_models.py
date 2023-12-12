@@ -50,7 +50,7 @@ class Models():
 
             return [], []
         else:
-            return np.array(r_y), np.array(final_predictions)
+            return np.array(final_y), np.array(final_predictions)
     
     def LSTM(self):
         model1 = Sequential()
@@ -62,7 +62,7 @@ class Models():
         cp1 = ModelCheckpoint('lstm_model/', save_best_only=True)
         model1.compile(loss=MeanSquaredError(), optimizer=Adam(learning_rate=0.0001), metrics=[RootMeanSquaredError()])
 
-        model1.fit(self.trainX, self.trainY, validation_data=(self.valX, self.valY), epochs=100, callbacks=[cp1])
+        model1.fit(self.trainX, self.trainY, validation_data=(self.valX, self.valY), epochs=50, callbacks=[cp1])
         print("********LSTM MODEL HAS SUCCESSFULLY BEEN TRAINED********\n")
 
         true_val, pred_val = self.plot_predictions1(model1, self.testX, self.testY, "LSTM")
@@ -115,7 +115,7 @@ class Models():
         cp2 = ModelCheckpoint('gru_model/', save_best_only=True)
         model2.compile(loss=MeanSquaredError(), optimizer=Adam(learning_rate=0.0001), metrics=[RootMeanSquaredError()])
 
-        model2.fit(self.trainX, self.trainY, validation_data=(self.valX, self.valY), epochs=100, callbacks=[cp2])
+        model2.fit(self.trainX, self.trainY, validation_data=(self.valX, self.valY), epochs=50, callbacks=[cp2])
         print("********GRU MODEL HAS SUCCESSFULLY BEEN TRAINED********\n")
 
         true_val, pred_val = self.plot_predictions1(model2, self.testX, self.testY, "GRU")
@@ -169,7 +169,7 @@ class Models():
         cp3 = ModelCheckpoint('cnn1d_model/', save_best_only=True)
         model3.compile(loss=MeanSquaredError(), optimizer=Adam(learning_rate=0.0001), metrics=[RootMeanSquaredError()])
 
-        model3.fit(self.trainX, self.trainY, validation_data=(self.valX, self.valY), epochs=100, callbacks=[cp3])
+        model3.fit(self.trainX, self.trainY, validation_data=(self.valX, self.valY), epochs=10, callbacks=[cp3])
         print("********CNN1D MODEL HAS SUCCESSFULLY BEEN TRAINED********\n")
 
         true_val, pred_val = self.plot_predictions1(model3, self.testX, self.testY, "CNN1D")
