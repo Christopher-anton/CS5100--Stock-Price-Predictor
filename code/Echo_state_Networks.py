@@ -8,7 +8,6 @@ from tqdm import tqdm
 import seaborn as sns
 from matplotlib import rc
 
-# This is the library for the Reservoir Computing got it by: https://github.com/cknd/pyESN
 from pyESN.pyESN import ESN 
 
 import yfinance as yf 
@@ -32,16 +31,16 @@ high.to_csv(file_path, sep='\t', index=False, header=False)
 # filename = 
 
 # Read dataset
-data = open("TSLA.csv").read().split()
+data = open(str(file_path)).read().split()
+# data = open("amazon.txt").read().split()
 data = np.array(data).astype('float64')
-# print("Helloooooooo")
 n_reservoir= 500
 sparsity=0.2
 rand_seed=23
 spectral_radius = 1.2
 noise = .0005
 
-def MAPE(self, true_val, pred_val):
+def MAPE(true_val, pred_val):
     sum = 0
     for i in range(len(true_val)):
         sum += np.abs((true_val[i] - pred_val[i]) / true_val[i])
@@ -58,7 +57,7 @@ esn = ESN(n_inputs = 1,
       noise=noise)
 
 trainlen = 1500
-future = 10
+future = 2
 futureTotal=100
 pred_tot=np.zeros(futureTotal)
 
@@ -73,14 +72,19 @@ rc('text', usetex=False)
 
 plt.figure(figsize=(16,8))
 plt.plot(range(1000,trainlen+futureTotal),data[1000:trainlen+futureTotal],'b',label="Tesla Stock", alpha=0.3)
-#plt.plot(range(0,trainlen),pred_training,'.g',  alpha=0.3)
+# plt.plot(range(0,trainlen),pred_training,'.g',  alpha=0.3)
 plt.plot(range(trainlen,trainlen+futureTotal),pred_tot,'k',  alpha=0.8, label='Free Running ESN')
 lo,hi = plt.ylim()
 plt.plot([trainlen,trainlen],[lo+np.spacing(1),hi-np.spacing(1)],'k:', linewidth=4)
 
 plt.title(r'Tesla Ground Truth and Echo State Network Output', fontsize=25)
-plt.xlabel(r'Time (5 Days)', fontsize=20,labelpad=10)
+plt.xlabel(r'Time (2 Days)', fontsize=20,labelpad=10)
 plt.ylabel(r'Price ($)', fontsize=20,labelpad=10)
 plt.legend(fontsize='xx-large', loc='best')
 sns.despine()
 plt.show()
+
+true = data[trainlen:trainlen+futureTotal]
+pred = pred_tot
+print("XXXXXXXXXXXXXX MAPE XXXXXXXXXXXXXX")
+print(MAPE(true,pred))
