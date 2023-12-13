@@ -1,6 +1,6 @@
 # CS5100--Stock-Price-Predictor
 
-# to download dataset
+ to download dataset
 # 1. go to "https://finance.yahoo.com/quote/TSLA/history?p=TSLA" 
 # 2. make sure to download the data dating back 5 years
 # store the file inside code/dataset
